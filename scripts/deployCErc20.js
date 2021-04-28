@@ -1,4 +1,4 @@
-const Qstroller = artifacts.require("Qstroller");
+const DCtroller = artifacts.require("DCtroller");
 const erc20Delegate = artifacts.require("CErc20Delegate");
 const erc20Delegator = artifacts.require("CErc20Delegator");
 const Unitroller = artifacts.require("Unitroller");
@@ -27,20 +27,20 @@ module.exports = async function(callback) {
         console.log(`dTokenName: ${fTokenName}`)
         console.log(`dTokenSymbol: ${fTokenSymbol}`)
 
-        let qsControllerInstance = await Qstroller.at(Unitroller.address);
-        let admin = await qsControllerInstance.admin();
+        let DCControllerInstance = await DCtroller.at(Unitroller.address);
+        let admin = await DCControllerInstance.admin();
         let newErc20Delegate = await erc20Delegate.new();
         let fTokenInstance = await erc20Delegator.new(underlyingTokenAddr, Unitroller.address, interestModelAddress, initialExchange.toString(), fTokenName, fTokenSymbol, 18, admin, newErc20Delegate.address, "0x0");
         await fTokenInstance._setReserveFactor(reserveFactor);
 
-        await qsControllerInstance._supportMarket(fTokenInstance.address);
+        await DCControllerInstance._supportMarket(fTokenInstance.address);
         console.log(`Done to support market ${fTokenSymbol}: ${fTokenInstance.address}`);
 
-        await qsControllerInstance._setCollateralFactor(fTokenInstance.address, collateralFactor);
+        await DCControllerInstance._setCollateralFactor(fTokenInstance.address, collateralFactor);
         console.log("Done to set collateral factor %s for %s %s", collateralFactor, fTokenSymbol, fTokenInstance.address);
 
-        await qsControllerInstance._setMintPaused(fTokenInstance.address, true)
-        console.log("MintPaused: ", await qsControllerInstance.mintGuardianPaused(fTokenInstance.address))
+        await DCControllerInstance._setMintPaused(fTokenInstance.address, true)
+        console.log("MintPaused: ", await DCControllerInstance.mintGuardianPaused(fTokenInstance.address))
         callback();
     } catch (e) {
         callback(e);

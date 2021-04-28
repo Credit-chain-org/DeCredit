@@ -4,7 +4,7 @@ import "./compound/Unitroller.sol";
 import "./compound/Exponential.sol";
 import "./Ownable.sol";
 
-contract QsConfig is Ownable, Exponential {
+contract DCConfig is Ownable, Exponential {
     bool public compSpeedGuardianPaused = true;
     address public compToken;
     uint public safetyVaultRatio;
@@ -22,12 +22,12 @@ contract QsConfig is Ownable, Exponential {
     event WhitelistChange(address user, bool enabled);
     event BlacklistChange(address user, bool enabled);
 
-    constructor(QsConfig previousQsConfig) public {
-        if (address(previousQsConfig) == address(0x0)) return;
+    constructor(DCConfig previousDCConfig) public {
+        if (address(previousDCConfig) == address(0x0)) return;
 
-        compToken = previousQsConfig.compToken();
-        safetyVaultRatio = previousQsConfig.safetyVaultRatio();
-        safetyVault = previousQsConfig.safetyVault();
+        compToken = previousDCConfig.compToken();
+        safetyVaultRatio = previousDCConfig.safetyVaultRatio();
+        safetyVault = previousDCConfig.safetyVault();
     }
 
     function _setCompToken(address _compToken) public onlyOwner {

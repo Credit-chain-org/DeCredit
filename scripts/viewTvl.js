@@ -1,12 +1,12 @@
-const Qstroller = artifacts.require("Qstroller");
+const DCtroller = artifacts.require("DCtroller");
 const Unitroller = artifacts.require("Unitroller");
 const CToken = artifacts.require("CToken");
 
 module.exports = async function(callback) {
     try {
         let unitrollerInstance = await Unitroller.deployed();
-        let proxiedQstroller = await Qstroller.at(unitrollerInstance.address);
-        let allSupportedMarkets = await proxiedQstroller.getAllMarkets();
+        let proxiedDCtroller = await DCtroller.at(unitrollerInstance.address);
+        let allSupportedMarkets = await proxiedDCtroller.getAllMarkets();
         for (market of allSupportedMarkets) {
             let cTokenInstance = await CToken.at(market);
             let cTokenName = await cTokenInstance.name();

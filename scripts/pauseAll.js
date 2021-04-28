@@ -1,4 +1,4 @@
-const Qstroller = artifacts.require("Qstroller")
+const DCtroller = artifacts.require("DCtroller")
 const Unitroller = artifacts.require("Unitroller")
 
 const argv = require('yargs').argv
@@ -7,19 +7,19 @@ module.exports = async function(callback) {
     try {
         console.log(`argv> dToken=${argv.fToken}, paused=${argv.paused}`)
 
-        let qsControllerInstance = await Qstroller.at(Unitroller.address)
+        let DCControllerInstance = await DCtroller.at(Unitroller.address)
         
-        await qsControllerInstance._setMintPaused(argv.fToken, argv.paused)
-        console.log("MintPaused: ", await qsControllerInstance.mintGuardianPaused(argv.fToken))
+        await DCControllerInstance._setMintPaused(argv.fToken, argv.paused)
+        console.log("MintPaused: ", await DCControllerInstance.mintGuardianPaused(argv.fToken))
 
-        await qsControllerInstance._setBorrowPaused(argv.fToken, argv.paused)
-        console.log("BorrowPaused: ", await qsControllerInstance.borrowGuardianPaused(argv.fToken))
+        await DCControllerInstance._setBorrowPaused(argv.fToken, argv.paused)
+        console.log("BorrowPaused: ", await DCControllerInstance.borrowGuardianPaused(argv.fToken))
         
-        await qsControllerInstance._setTransferPaused(argv.paused)
-        console.log("TransferPaused: ", await qsControllerInstance.transferGuardianPaused())
+        await DCControllerInstance._setTransferPaused(argv.paused)
+        console.log("TransferPaused: ", await DCControllerInstance.transferGuardianPaused())
 
-        await qsControllerInstance._setSeizePaused(argv.paused)
-        console.log("SeizePaused: ", await qsControllerInstance.seizeGuardianPaused())
+        await DCControllerInstance._setSeizePaused(argv.paused)
+        console.log("SeizePaused: ", await DCControllerInstance.seizeGuardianPaused())
 
         callback()
     } catch (e) {

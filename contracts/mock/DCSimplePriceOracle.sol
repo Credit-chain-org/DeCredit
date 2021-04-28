@@ -2,7 +2,7 @@ pragma solidity ^0.5.16;
 
 import "../compound/SimplePriceOracle.sol";
 
-contract QsSimplePriceOracle is SimplePriceOracle {
+contract DCSimplePriceOracle is SimplePriceOracle {
     function getUnderlyingPrice(CToken cToken) public view returns (uint) {
         if (compareStrings(cToken.symbol(), "dETH")) {
             return 1e18;

@@ -1,9 +1,9 @@
-const Qstroller = artifacts.require("Qstroller");
+const DCtroller = artifacts.require("DCtroller");
 const Unitroller = artifacts.require("Unitroller");
 
 module.exports = async function(callback) {
     try {
-       let newControllerInstance = await Qstroller.new();
+       let newControllerInstance = await DCtroller.new();
        let unitrollerInstance = await Unitroller.deployed();
        let impl = await unitrollerInstance.comptrollerImplementation();
        console.log(`old implementation: ${impl}`, );
@@ -11,8 +11,8 @@ module.exports = async function(callback) {
        await newControllerInstance._become(unitrollerInstance.address);
        impl = await unitrollerInstance.comptrollerImplementation();
        console.log(`new implementation: ${impl}`);
-        let proxiedQstroller = await Qstroller.at(unitrollerInstance.address);
-        let allSupportedMarkets = await proxiedQstroller.getAllMarkets();
+        let proxiedDCtroller = await DCtroller.at(unitrollerInstance.address);
+        let allSupportedMarkets = await proxiedDCtroller.getAllMarkets();
         console.log(allSupportedMarkets);
        callback();
     } catch (e) {

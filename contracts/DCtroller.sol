@@ -2,15 +2,15 @@ pragma solidity ^0.5.16;
 
 import "./compound/Comptroller.sol";
 import "./compound/EIP20Interface.sol";
-import "./QsConfig.sol";
+import "./DCConfig.sol";
 
-contract Qstroller is Comptroller {
-    QsConfig public qsConfig;
+contract DCtroller is Comptroller {
+    DCConfig public DCConfig;
 
-    function _setQsConfig(QsConfig _qsConfig) public {
+    function _setDCConfig(DCConfig _DCConfig) public {
         require(msg.sender == admin);
 
-        qsConfig = _qsConfig;
+        DCConfig = _DCConfig;
     }
 
     /**
@@ -38,14 +38,14 @@ contract Qstroller is Comptroller {
 
 
     function refreshCompSpeeds() public {
-        require(!qsConfig.compSpeedGuardianPaused());
+        require(!DCConfig.compSpeedGuardianPaused());
         require(msg.sender == tx.origin);
 
         refreshCompSpeedsInternal();
     }
 
     function refreshCompSpeedsInternal() internal {
-        if (qsConfig.compSpeedGuardianPaused()) {
+        if (DCConfig.compSpeedGuardianPaused()) {
             return;
         } else {
             super.refreshCompSpeedsInternal();
@@ -53,11 +53,11 @@ contract Qstroller is Comptroller {
     }
 
     function getCompAddress() public view returns (address) {
-        return qsConfig.compToken();
+        return DCConfig.compToken();
     }
     
     function calculateSeizeTokenAllocation(uint _seizeTokenAmount) public view returns(uint liquidatorAmount, uint safetyVaultAmount) {
-        return qsConfig.calculateSeizeTokenAllocation(_seizeTokenAmount, liquidationIncentiveMantissa);
+        return DCConfig.calculateSeizeTokenAllocation(_seizeTokenAmount, liquidationIncentiveMantissa);
     }
     
     function transferComp(address user, uint userAccrued, uint threshold) internal returns (uint) {
@@ -66,9 +66,9 @@ contract Qstroller is Comptroller {
             EIP20Interface comp = EIP20Interface(compAddress);
             uint compRemaining = comp.balanceOf(address(this));
             if (userAccrued <= compRemaining) {
-                (uint userAmount, uint governanceAmount) = qsConfig.getCompAllocation(user, userAccrued);
+                (uint userAmount, uint governanceAmount) = DCConfig.getCompAllocation(user, userAccrued);
                 if (userAmount > 0) comp.transfer(user, userAmount);
-                if (governanceAmount > 0) comp.transfer(qsConfig.safetyVault(), governanceAmount);
+                if (governanceAmount > 0) comp.transfer(DCConfig.safetyVault(), governanceAmount);
                 return 0;
             }
         }
@@ -83,7 +83,7 @@ contract Qstroller is Comptroller {
      * @return 0 if the mint is allowed, otherwise a semi-opaque error code (See ErrorReporter.sol)
      */
     function mintAllowed(address cToken, address minter, uint mintAmount) external returns (uint) {
-        require(!qsConfig.isBlocked(minter));
+        require(!DCConfig.isBlocked(minter));
         // Pausing is a very serious situation - we revert to sound the alarms
         require(!mintGuardianPaused[cToken]);
 

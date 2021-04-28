@@ -6,7 +6,7 @@ import "./IPriceCollector.sol";
 import "./SToken.sol";
 import "./compound/SafeMath.sol";
 
-contract QsPriceOracle is PriceOracle, IPriceCollector {
+contract DCPriceOracle is PriceOracle, IPriceCollector {
     struct ErrorInfo {
         uint timestamp;
         uint previousPrice;

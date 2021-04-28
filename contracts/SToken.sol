@@ -1,7 +1,7 @@
 pragma solidity ^0.5.16;
 
 import "./compound/CToken.sol";
-import "./Qstroller.sol";
+import "./DCtroller.sol";
 
 contract SToken is CToken {
 
@@ -24,8 +24,8 @@ contract SToken is CToken {
         uint safetyVaultTokens;
         uint liquidatorSeizeTokens;
 
-        (liquidatorSeizeTokens, safetyVaultTokens) = Qstroller(address(comptroller)).qsConfig().calculateSeizeTokenAllocation(seizeTokens, Qstroller(address(comptroller)).liquidationIncentiveMantissa());
-        address safetyVault = Qstroller(address(comptroller)).qsConfig().safetyVault();
+        (liquidatorSeizeTokens, safetyVaultTokens) = DCtroller(address(comptroller)).DCConfig().calculateSeizeTokenAllocation(seizeTokens, DCtroller(address(comptroller)).liquidationIncentiveMantissa());
+        address safetyVault = DCtroller(address(comptroller)).DCConfig().safetyVault();
         /*
          * We calculate the new borrower and liquidator token balances, failing on underflow/overflow:
          *  borrowerTokensNew = accountTokens[borrower] - seizeTokens

@@ -1,4 +1,4 @@
-const Qstroller = artifacts.require("Qstroller");
+const DCtroller = artifacts.require("DCtroller");
 const Unitroller = artifacts.require("Unitroller");
 const InterestModel = artifacts.require("DefaultHecoInterestModel");
 const CToken = artifacts.require("CToken");
@@ -7,8 +7,8 @@ module.exports = async function(callback) {
     try {
         let newInterestModel = await InterestModel.new("20000000000000000", "320000000000000000");
         let unitrollerInstance = await Unitroller.deployed();
-        let proxiedQstroller = await Qstroller.at(unitrollerInstance.address);
-        let allSupportedMarkets = await proxiedQstroller.getAllMarkets();
+        let proxiedDCtroller = await DCtroller.at(unitrollerInstance.address);
+        let allSupportedMarkets = await proxiedDCtroller.getAllMarkets();
         for (market of allSupportedMarkets) {
             let interestModelAddr = newInterestModel.address;
             let cTokenInstance = await CToken.at(market);
