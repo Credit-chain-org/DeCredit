@@ -67,25 +67,25 @@ module.exports = {
     // }
 
       hecotest: {
-          provider: () => new HDWalletProvider(mnemonic, `wss://ws-testnet.hecochain.com`),
-          network_id: "256",
+          provider: () => new HDWalletProvider(mnemonic, `https://data-seed-prebsc-1-s1.binance.org:8545/`),
+          network_id: "97",
           timeoutBlocks: 200,
           confirmations: 2,
           gasPrice: 2000000000,
           skipDryRun: true,
           networkCheckTimeout: 100000000,
-          websockets: true
+          websockets: false
       },
 
       heco: {
-          provider: () => new HDWalletProvider(mnemonic, `wss://ws-mainnet.hecochain.com`),
-          network_id: "128",   // This network is yours, in the cloud.
+          provider: () => new HDWalletProvider(mnemonic, `https://bsc-dataseed.binance.org/`),
+          network_id: "56",   // This network is yours, in the cloud.
           timeoutBlocks: 200,
           confirmations: 2,
           gasPrice: 5000000000,
           skipDryRun: true,
           networkCheckTimeout: 100000000,
-          websockets: true
+          websockets: false
       },
   },
 
