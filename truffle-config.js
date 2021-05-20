@@ -66,7 +66,7 @@ module.exports = {
       // production: true    // Treats this network as if it was a public net. (default: false)
     // }
 
-      hecotest: {
+      bsctest: {
           provider: () => new HDWalletProvider(mnemonic, `https://data-seed-prebsc-1-s1.binance.org:8545/`),
           network_id: "97",
           timeoutBlocks: 200,
@@ -77,7 +77,7 @@ module.exports = {
           websockets: false
       },
 
-      heco: {
+      bsc: {
           provider: () => new HDWalletProvider(mnemonic, `https://bsc-dataseed.binance.org/`),
           network_id: "56",   // This network is yours, in the cloud.
           timeoutBlocks: 200,
