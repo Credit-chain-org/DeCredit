@@ -9,6 +9,7 @@ const CompoundLens = artifacts.require("CompoundLens");
 const DCPriceOracle = artifacts.require("DCPriceOracle");
 const DCConfig = artifacts.require("DCConfig");
 const Maximillion = artifacts.require("Maximillion");
+const CreditOracle = artifacts.require("CreditOracle");
 
 // Mock Tokens
 const TetherToken = artifacts.require("TetherToken");
@@ -28,11 +29,13 @@ module.exports = async function(deployer, network) {
     await deployer.deploy(CompoundLens);
     await deployer.deploy(DCPriceOracle);
     await deployer.deploy(DCConfig, "0x0000000000000000000000000000000000000000");
+    await deployer.deploy(CreditOracle);
 
     addressFactory["DCtroller"] = Unitroller.address;
     addressFactory["DCPriceOracle"] = DCPriceOracle.address;
     addressFactory["DCConfig"] = DCConfig.address;
     addressFactory["CompoundLens"] = CompoundLens.address;
+    addressFactory["CreditOracle"] = CreditOracle.address;
 
     let unitrollerInstance = await Unitroller.deployed();
     let DCtrollerInstance = await DCtroller.deployed();
@@ -50,7 +53,7 @@ module.exports = async function(deployer, network) {
     console.log("Done to set price oracle.", await proxiedDCtroller.oracle());
 
     await proxiedDCtroller._setDCConfig(DCConfig.address);
-    console.log("Done to set config.", await  proxiedDCtroller.DCConfig());
+    console.log("Done to set config.", await  proxiedDCtroller.dcConfig());
 
     await proxiedDCtroller._setMaxAssets(maxAssets);
     let result = await proxiedDCtroller.maxAssets();
