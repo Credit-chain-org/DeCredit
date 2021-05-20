@@ -24,8 +24,8 @@ contract SToken is CToken {
         uint safetyVaultTokens;
         uint liquidatorSeizeTokens;
 
-        (liquidatorSeizeTokens, safetyVaultTokens) = DCtroller(address(comptroller)).DCConfig().calculateSeizeTokenAllocation(seizeTokens, DCtroller(address(comptroller)).liquidationIncentiveMantissa());
-        address safetyVault = DCtroller(address(comptroller)).DCConfig().safetyVault();
+        (liquidatorSeizeTokens, safetyVaultTokens) = DCtroller(address(comptroller)).dcConfig().calculateSeizeTokenAllocation(seizeTokens, DCtroller(address(comptroller)).liquidationIncentiveMantissa());
+        address safetyVault = DCtroller(address(comptroller)).dcConfig().safetyVault();
         /*
          * We calculate the new borrower and liquidator token balances, failing on underflow/overflow:
          *  borrowerTokensNew = accountTokens[borrower] - seizeTokens

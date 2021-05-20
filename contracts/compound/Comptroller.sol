@@ -689,75 +689,7 @@ contract Comptroller is ComptrollerV3Storage, ComptrollerInterface, ComptrollerE
         address account,
         CToken cTokenModify,
         uint redeemTokens,
-        uint borrowAmount) internal view returns (Error, uint, uint) {
-
-        AccountLiquidityLocalVars memory vars; // Holds all our calculation results
-        uint oErr;
-        MathError mErr;
-
-        // For each asset the account is in
-        CToken[] memory assets = accountAssets[account];
-        for (uint i = 0; i < assets.length; i++) {
-            CToken asset = assets[i];
-
-            // Read the balances and exchange rate from the cToken
-            (oErr, vars.cTokenBalance, vars.borrowBalance, vars.exchangeRateMantissa) = asset.getAccountSnapshot(account);
-            if (oErr != 0) { // semi-opaque error code, we assume NO_ERROR == 0 is invariant between upgrades
-                return (Error.SNAPSHOT_ERROR, 0, 0);
-            }
-            vars.collateralFactor = Exp({mantissa: markets[address(asset)].collateralFactorMantissa});
-            vars.exchangeRate = Exp({mantissa: vars.exchangeRateMantissa});
-
-            // Get the normalized price of the asset
-            vars.oraclePriceMantissa = oracle.getUnderlyingPrice(asset);
-            if (vars.oraclePriceMantissa == 0) {
-                return (Error.PRICE_ERROR, 0, 0);
-            }
-            vars.oraclePrice = Exp({mantissa: vars.oraclePriceMantissa});
-
-            // Pre-compute a conversion factor from tokens -> ether (normalized price value)
-            (mErr, vars.tokensToDenom) = mulExp3(vars.collateralFactor, vars.exchangeRate, vars.oraclePrice);
-            if (mErr != MathError.NO_ERROR) {
-                return (Error.MATH_ERROR, 0, 0);
-            }
-
-            // sumCollateral += tokensToDenom * cTokenBalance
-            (mErr, vars.sumCollateral) = mulScalarTruncateAddUInt(vars.tokensToDenom, vars.cTokenBalance, vars.sumCollateral);
-            if (mErr != MathError.NO_ERROR) {
-                return (Error.MATH_ERROR, 0, 0);
-            }
-
-            // sumBorrowPlusEffects += oraclePrice * borrowBalance
-            (mErr, vars.sumBorrowPlusEffects) = mulScalarTruncateAddUInt(vars.oraclePrice, vars.borrowBalance, vars.sumBorrowPlusEffects);
-            if (mErr != MathError.NO_ERROR) {
-                return (Error.MATH_ERROR, 0, 0);
-            }
-
-            // Calculate effects of interacting with cTokenModify
-            if (asset == cTokenModify) {
-                // redeem effect
-                // sumBorrowPlusEffects += tokensToDenom * redeemTokens
-                (mErr, vars.sumBorrowPlusEffects) = mulScalarTruncateAddUInt(vars.tokensToDenom, redeemTokens, vars.sumBorrowPlusEffects);
-                if (mErr != MathError.NO_ERROR) {
-                    return (Error.MATH_ERROR, 0, 0);
-                }
-
-                // borrow effect
-                // sumBorrowPlusEffects += oraclePrice * borrowAmount
-                (mErr, vars.sumBorrowPlusEffects) = mulScalarTruncateAddUInt(vars.oraclePrice, borrowAmount, vars.sumBorrowPlusEffects);
-                if (mErr != MathError.NO_ERROR) {
-                    return (Error.MATH_ERROR, 0, 0);
-                }
-            }
-        }
-
-        // These are safe, as the underflow condition is checked first
-        if (vars.sumCollateral > vars.sumBorrowPlusEffects) {
-            return (Error.NO_ERROR, vars.sumCollateral - vars.sumBorrowPlusEffects, 0);
-        } else {
-            return (Error.NO_ERROR, 0, vars.sumBorrowPlusEffects - vars.sumCollateral);
-        }
-    }
+        uint borrowAmount) internal view returns (Error, uint, uint);
 
     /**
      * @notice Calculate number of tokens of collateral asset to seize given an underlying amount
@@ -1348,7 +1280,5 @@ contract Comptroller is ComptrollerV3Storage, ComptrollerInterface, ComptrollerE
      * @notice Return the address of the COMP token
      * @return The address of COMP
      */
-    function getCompAddress() public view returns (address) {
-        return 0xc00e94Cb662C3520282E6f5717214004A7f26888;
-    }
+    function getCompAddress() public view returns (address);
 }
