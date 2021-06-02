@@ -20,8 +20,6 @@ const closeFactor = 0.5e18.toString();
 const liquidationIncentive = 1.1e18.toString();
 const reserveFactor = 0.3e18.toString();
 
-const maxAssets = 10;
-
 let addressFactory = {};
 module.exports = async function(deployer, network) {
     await deployer.deploy(Unitroller);
@@ -54,10 +52,6 @@ module.exports = async function(deployer, network) {
 
     await proxiedDCtroller._setDCConfig(DCConfig.address);
     console.log("Done to set config.", await  proxiedDCtroller.dcConfig());
-
-    await proxiedDCtroller._setMaxAssets(maxAssets);
-    let result = await proxiedDCtroller.maxAssets();
-    console.log("Done to set max assets.", result.toString());
 
     await proxiedDCtroller._setLiquidationIncentive(liquidationIncentive);
     console.log("Done to set liquidation incentive.");
@@ -112,7 +106,7 @@ module.exports = async function(deployer, network) {
         console.log("Done to update price oracle.");
     }
 
-    if (network == "hecotest" || network == "heco") {
+    if (network == "bsctest" || network == "bsc") {
         await deployer.deploy(cEther, Unitroller.address, InterestModel.address, 0.02e18.toString(), "DeCredit HT", "dHT", 18, admin);
         await proxiedDCtroller._supportMarket(cEther.address);
         console.log("Done to support market dHT: ", cEther.address);

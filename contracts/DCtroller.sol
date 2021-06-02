@@ -35,23 +35,7 @@ contract DCtroller is Comptroller {
             compSpeeds[cToken] = _compSpeeds[i];
             _compRate = add_(_compRate, _compSpeeds[i]);
         }
-        _setCompRate(_compRate);
-    }
-
-
-    function refreshCompSpeeds() public {
-        require(!dcConfig.compSpeedGuardianPaused());
-        require(msg.sender == tx.origin);
-
-        refreshCompSpeedsInternal();
-    }
-
-    function refreshCompSpeedsInternal() internal {
-        if (dcConfig.compSpeedGuardianPaused()) {
-            return;
-        } else {
-            super.refreshCompSpeedsInternal();
-        }
+        compRate = _compRate;
     }
 
     function getCompAddress() public view returns (address) {

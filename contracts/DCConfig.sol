@@ -5,7 +5,6 @@ import "./compound/Exponential.sol";
 import "./Ownable.sol";
 
 contract DCConfig is Ownable, Exponential {
-    bool public compSpeedGuardianPaused = true;
     address public compToken;
     uint public safetyVaultRatio;
     address public safetyVault;
@@ -48,11 +47,6 @@ contract DCConfig is Ownable, Exponential {
         emit NewSafetyVaultRatio(oldSafetyVaultRatio, safetyVaultRatio);
     }
     
-    function _setCompSpeedGuardianPaused(bool state) public onlyOwner returns (bool) {
-        compSpeedGuardianPaused = state;
-        return state;
-    }
-    
     function calculateSeizeTokenAllocation(uint _seizeTokenAmount, uint liquidationIncentiveMantissa) public view returns(uint liquidatorAmount, uint safetyVaultAmount) {
         Exp memory vaultRatio = Exp({mantissa:safetyVaultRatio});
         (,Exp memory tmp) = mulScalar(vaultRatio, _seizeTokenAmount);
@@ -71,7 +65,7 @@ contract DCConfig is Ownable, Exponential {
     }
 
     function _setCompRatio(uint _compRatio) public onlyOwner {
-        require(_compRatio < 1e18, "compRatio should be less then 100%");
+        require(_compRatio <= 1e18, "compRatio should be less then 100%");
         uint oldCompRatio = compRatio;
         compRatio = _compRatio;
 

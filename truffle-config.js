@@ -44,6 +44,7 @@ module.exports = {
      host: "127.0.0.1",     // Localhost (default: none)
      port: 7545,            // Standard Ethereum port (default: none)
      network_id: "5777",       // Any network (default: none)
+     gas: "10000000"
     },
 
     // Another network with more advanced options...
@@ -67,13 +68,13 @@ module.exports = {
     // }
 
       bsctest: {
-          provider: () => new HDWalletProvider(mnemonic, `https://data-seed-prebsc-1-s1.binance.org:8545/`),
+          provider: () => new HDWalletProvider(mnemonic, `https://data-seed-prebsc-2-s1.binance.org:8545/`),
           network_id: "97",
-          timeoutBlocks: 200,
-          confirmations: 2,
-          gasPrice: 2000000000,
-          skipDryRun: true,
-          networkCheckTimeout: 100000000,
+          timeoutBlocks: 600,
+          //confirmations: 2,
+          gasPrice: 10000000000,
+          skipDryRun: false,
+          networkCheckTimeout: 600000000,
           websockets: false
       },
 
@@ -87,6 +88,28 @@ module.exports = {
           networkCheckTimeout: 100000000,
           websockets: false
       },
+
+      hecotest: {
+        provider: () => new HDWalletProvider(mnemonic, `wss://ws-testnet.hecochain.com`),
+        network_id: "256",
+        timeoutBlocks: 200,
+        confirmations: 2,
+        gas: 7500000,
+        gasPrice: 2000000000,
+        skipDryRun: true,
+        networkCheckTimeout: 100000000,
+        websockets: true
+    },
+    heco: {
+      provider: () => new HDWalletProvider(mnemonic, `wss://ws-mainnet.hecochain.com`),
+      network_id: "128",   // This network is yours, in the cloud.
+      timeoutBlocks: 200,
+      confirmations: 2,
+      gasPrice: 5000000000,
+      skipDryRun: true,
+      networkCheckTimeout: 100000000,
+      websockets: true
+  },
   },
 
   // Set default mocha options here, use special reporters etc.
