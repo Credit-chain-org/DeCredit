@@ -109,12 +109,12 @@ module.exports = async function(deployer, network) {
         await deployer.deploy(ChainLinkPriceOracle, bnbPriceSource);
         await proxiedDCtroller._setPriceOracle(ChainLinkPriceOracle.address);
         console.log("Done to set price oracle.", await proxiedDCtroller.oracle());    
-        await deployer.deploy(cEther, Unitroller.address, InterestModel.address, 0.02e18.toString(), "DeCredit HT", "dBNB", 18, admin);
+        await deployer.deploy(cEther, Unitroller.address, InterestModel.address, 0.02e18.toString(), "DeCredit BNB", "dBNB", 18, admin);
         await proxiedDCtroller._supportMarket(cEther.address);
         console.log("Done to support market dBNB: ", cEther.address);
-        let htCollateralFactor = 0.15e18.toString();
-        await proxiedDCtroller._setCollateralFactor(cEther.address, htCollateralFactor);
-        console.log("Done to set collateral factor %s for dBNB %s", htCollateralFactor, cEther.address);
+        let bnbCollateralFactor = 0.15e18.toString();
+        await proxiedDCtroller._setCollateralFactor(cEther.address, bnbCollateralFactor);
+        console.log("Done to set collateral factor %s for dBNB %s", bnbCollateralFactor, cEther.address);
         addressFactory["dBNB"] = cEther.address;
         await deployer.deploy(Maximillion, cEther.address);
         addressFactory["Maximillion"] = Maximillion.address;
