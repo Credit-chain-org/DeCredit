@@ -1,0 +1,27 @@
+{
+  "name": "decredit",
+  "version": "1.0.0",
+  "description": "",
+  "main": "truffle-config.js",
+  "directories": {
+    "doc": "docs"
+  },
+  "dependencies": {
+    "pify": "^5.0.0"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "genabi": "truffle compile --all && truffle-abi -d build/contracts/ -o abi"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Credit-chain-org/DeCredit.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Credit-chain-org/DeCredit/issues"
+  },
+  "homepage": "https://github.com/Credit-chain-org/DeCredit#readme"
+}
