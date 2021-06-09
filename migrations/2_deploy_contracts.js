@@ -1,12 +1,12 @@
 const SimplePriceOracle = artifacts.require("DCSimplePriceOracle");
-const InterestModel = artifacts.require("WhitePaperInterestRateModel");
+const InterestModel = artifacts.require("BSCJumpInterestModel");
 const DCtroller = artifacts.require("DCtroller");
 const cEther = artifacts.require("CEther");
 const erc20Delegate = artifacts.require("CErc20Delegate");
 const erc20Delegator = artifacts.require("CErc20Delegator");
 const Unitroller = artifacts.require("Unitroller");
 const CompoundLens = artifacts.require("CompoundLens");
-const DCPriceOracle = artifacts.require("DCPriceOracle");
+const ChainLinkPriceOracle = artifacts.require("ChainlinkAdaptor");
 const DCConfig = artifacts.require("DCConfig");
 const Maximillion = artifacts.require("Maximillion");
 const CreditOracle = artifacts.require("CreditOracle");
@@ -25,12 +25,10 @@ module.exports = async function(deployer, network) {
     await deployer.deploy(Unitroller);
     await deployer.deploy(DCtroller);
     await deployer.deploy(CompoundLens);
-    await deployer.deploy(DCPriceOracle);
     await deployer.deploy(DCConfig, "0x0000000000000000000000000000000000000000");
     await deployer.deploy(CreditOracle);
 
     addressFactory["DCtroller"] = Unitroller.address;
-    addressFactory["DCPriceOracle"] = DCPriceOracle.address;
     addressFactory["DCConfig"] = DCConfig.address;
     addressFactory["CompoundLens"] = CompoundLens.address;
     addressFactory["CreditOracle"] = CreditOracle.address;
@@ -43,12 +41,9 @@ module.exports = async function(deployer, network) {
     await unitrollerInstance._setPendingImplementation(DCtroller.address);
     await DCtrollerInstance._become(Unitroller.address);
 
-    await deployer.deploy(InterestModel, "20000000000000000", "200000000000000000");
+    await deployer.deploy(InterestModel, 0.02e18.toString(), 0.2e18.toString(), 0.95e18.toString(), 0.05e18.toString());
 
     let proxiedDCtroller = await DCtroller.at(Unitroller.address);
-
-    await proxiedDCtroller._setPriceOracle(DCPriceOracle.address);
-    console.log("Done to set price oracle.", await proxiedDCtroller.oracle());
 
     await proxiedDCtroller._setDCConfig(DCConfig.address);
     console.log("Done to set config.", await  proxiedDCtroller.dcConfig());
@@ -107,15 +102,23 @@ module.exports = async function(deployer, network) {
     }
 
     if (network == "bsctest" || network == "bsc") {
-        await deployer.deploy(cEther, Unitroller.address, InterestModel.address, 0.02e18.toString(), "DeCredit HT", "dHT", 18, admin);
+        let bnbPriceSource = "0x2514895c72f50D8bd4B4F9b1110F0D6bD2c97526";
+        if (network == "bsc") {
+            bnbPriceSource = "0x0567F2323251f0Aab15c8dFb1967E4e8A7D42aeE";
+        }
+        await deployer.deploy(ChainLinkPriceOracle, bnbPriceSource);
+        await proxiedDCtroller._setPriceOracle(ChainLinkPriceOracle.address);
+        console.log("Done to set price oracle.", await proxiedDCtroller.oracle());    
+        await deployer.deploy(cEther, Unitroller.address, InterestModel.address, 0.02e18.toString(), "DeCredit HT", "dBNB", 18, admin);
         await proxiedDCtroller._supportMarket(cEther.address);
-        console.log("Done to support market dHT: ", cEther.address);
+        console.log("Done to support market dBNB: ", cEther.address);
         let htCollateralFactor = 0.15e18.toString();
         await proxiedDCtroller._setCollateralFactor(cEther.address, htCollateralFactor);
-        console.log("Done to set collateral factor %s for dHT %s", htCollateralFactor, cEther.address);
-        addressFactory["dHT"] = cEther.address;
+        console.log("Done to set collateral factor %s for dBNB %s", htCollateralFactor, cEther.address);
+        addressFactory["dBNB"] = cEther.address;
         await deployer.deploy(Maximillion, cEther.address);
         addressFactory["Maximillion"] = Maximillion.address;
+        addressFactory["ChainLinkPriceOracle"] = ChainLinkPriceOracle.address;
     }
     console.log("================= Copy and record below addresses ==============")
     console.log(addressFactory);

@@ -8,8 +8,8 @@ const argv = require('yargs').option('token', {string:true}).argv;
 
 let reserveFactor = 0.15e18.toString();
 let underlyingTokenAddr = "0xd3f1be7f74d25f39184d2d0670966e2e837562e3";
-let collateralFactor = 0.05e18.toString();
-let interestModelAddress = "0x0Ea2372497A4A73CC8A11766489E3EF84027835E";
+let collateralFactor = 0.5e18.toString();
+let interestModelAddress = "0x56D577516C4546593D3e8D29D71cBdD73AE77BAE";
 module.exports = async function(callback) {
     try {
         console.log(`argv> token=${argv.token}, collateralFactor=${argv.collateralFactor}`);
@@ -30,6 +30,7 @@ module.exports = async function(callback) {
         let DCControllerInstance = await DCtroller.at(Unitroller.address);
         let admin = await DCControllerInstance.admin();
         let newErc20Delegate = await erc20Delegate.new();
+        console.log("underlyingTokenAddr: ", underlyingTokenAddr, "Unitroller.address: ", Unitroller.address, "interestModelAddress: ", interestModelAddress, "initialExchange: ", initialExchange.toString(), "newErc20Delegate: ", newErc20Delegate.address)
         let fTokenInstance = await erc20Delegator.new(underlyingTokenAddr, Unitroller.address, interestModelAddress, initialExchange.toString(), fTokenName, fTokenSymbol, 18, admin, newErc20Delegate.address, "0x0");
         await fTokenInstance._setReserveFactor(reserveFactor);
 
