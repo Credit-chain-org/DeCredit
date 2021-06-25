@@ -10,9 +10,15 @@ contract DCtroller is Comptroller {
     CreditOracle public creditOracle;
 
     function _setDCConfig(DCConfig _dcConfig) public {
-        require(msg.sender == admin);
+        require(msg.sender == admin, "No admin permission");
 
         dcConfig = _dcConfig;
+    }
+
+    function _setCreditOracle(CreditOracle _creditOracle) public {
+        require(msg.sender == admin, "No admin permission");
+
+        creditOracle = _creditOracle;
     }
 
     /**

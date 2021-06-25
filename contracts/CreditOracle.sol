@@ -16,7 +16,7 @@ contract CreditOracle is Ownable {
 
     event CreditAdminChanged(address creditAdmin, bool);
     event CreditValueDefinitionChanged(uint scopeFrom, uint scopeTo, uint creditValue);
-    event CreditCollateralRatioChanged(address account, uint oldRatio, uint newRatio);
+    event CreditCollateralRatioChanged(address account, uint oldRatio, uint newRatio, uint creditScore);
 
     constructor() public {
         creditAdmin[msg.sender] = true;
@@ -30,6 +30,13 @@ contract CreditOracle is Ownable {
         require(creditScore > 0 && creditScore <= 100, "Invalid credit score");
 
         uint oldAccountCreditRatio = creditCollateralRatio[account];
+        uint accountCreditRatio = calCreditCollateralRatio(creditScore);
+        creditCollateralRatio[account] = accountCreditRatio;
+
+        emit CreditCollateralRatioChanged(account, oldAccountCreditRatio, accountCreditRatio, creditScore);
+    }
+
+    function calCreditCollateralRatio(uint creditScore) public view returns (uint) {
         uint accountCreditRatio = 0;
         for (uint i = 0; i < creditScoreScopes.length; i++) {
             if (creditScore >= creditScoreScopes[i]) {
@@ -37,9 +44,8 @@ contract CreditOracle is Ownable {
                 accountCreditRatio = creditScore * 1e13 * creditValue[creditScoreScopes[i]];
             }
         }
-        creditCollateralRatio[account] = accountCreditRatio;
 
-        emit CreditCollateralRatioChanged(account, oldAccountCreditRatio, accountCreditRatio);
+        return accountCreditRatio;
     }
 
     function getCreditCollateralRatio(address account) public view returns (uint) {
@@ -48,7 +54,7 @@ contract CreditOracle is Ownable {
 
     function setCreditValueDefinition(uint _scopeFrom, uint _scopeTo, uint _creditValue) public onlyOwner {
         require(_creditValue > 0 && _creditValue <= 100, "Zero credit value");
-        require(_scopeFrom > 0 && _scopeTo < 100, "Invalid credit scope value");
+        require(_scopeFrom > 0 && _scopeTo <= 100, "Invalid credit scope value");
         require(inScope(_scopeFrom), "Invalid credit scope value");
 
         creditValue[_scopeFrom] = _creditValue;
@@ -67,7 +73,7 @@ contract CreditOracle is Ownable {
         creditScoreScopes = _creditScoreScopes;
     }
 
-    function inScope(uint scopeFrom) internal returns (bool) {
+    function inScope(uint scopeFrom) internal view returns (bool) {
         for (uint i = 0; i < creditScoreScopes.length; i++) {
             if (scopeFrom == creditScoreScopes[i]) {
                 return true;
