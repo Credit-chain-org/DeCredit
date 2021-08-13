@@ -79,8 +79,9 @@ module.exports = {
       },
 
       bsc: {
-          provider: () => new HDWalletProvider(mnemonic, `https://bsc-dataseed.binance.org/`),
+          provider: () => new HDWalletProvider(mnemonic, `wss://speedy-nodes-nyc.moralis.io/50d91e85ea901f0b2e54edeb/bsc/mainnet/ws`),
           network_id: "56",   // This network is yours, in the cloud.
+          chain_id: "56",
           timeoutBlocks: 200,
           confirmations: 2,
           gasPrice: 5000000000,

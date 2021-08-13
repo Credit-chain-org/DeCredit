@@ -7,7 +7,7 @@
     "doc": "docs"
   },
   "dependencies": {
-    "pify": "^5.0.0"
+    "@truffle/hdwallet-provider": "^1.4.0"
   },
   "devDependencies": {},
   "scripts": {

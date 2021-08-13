@@ -413,7 +413,7 @@ contract CDelegateInterface is CDelegationStorage {
 
 pragma solidity ^0.5.16;
 
- 
+
 /**
  * @title Compound's CErc20Delegator Contract
  * @notice CTokens which wrap an EIP-20 underlying and delegate to an implementation

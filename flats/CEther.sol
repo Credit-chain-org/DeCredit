@@ -1,192 +1,3 @@
-// File: contracts/compound/SafeMath.sol
-
-pragma solidity ^0.5.16;
-
-// From https://github.com/OpenZeppelin/openzeppelin-contracts/blob/master/contracts/math/Math.sol
-// Subject to the MIT license.
-
-/**
- * @dev Wrappers over Solidity's arithmetic operations with added overflow
- * checks.
- *
- * Arithmetic operations in Solidity wrap on overflow. This can easily result
- * in bugs, because programmers usually assume that an overflow raises an
- * error, which is the standard behavior in high level programming languages.
- * `SafeMath` restores this intuition by reverting the transaction when an
- * operation overflows.
- *
- * Using this library instead of the unchecked operations eliminates an entire
- * class of bugs, so it's recommended to use it always.
- */
-library SafeMath {
-    /**
-     * @dev Returns the addition of two unsigned integers, reverting on overflow.
-     *
-     * Counterpart to Solidity's `+` operator.
-     *
-     * Requirements:
-     * - Addition cannot overflow.
-     */
-    function add(uint256 a, uint256 b) internal pure returns (uint256) {
-        uint256 c = a + b;
-        require(c >= a, "SafeMath: addition overflow");
-
-        return c;
-    }
-
-    /**
-     * @dev Returns the addition of two unsigned integers, reverting with custom message on overflow.
-     *
-     * Counterpart to Solidity's `+` operator.
-     *
-     * Requirements:
-     * - Addition cannot overflow.
-     */
-    function add(uint256 a, uint256 b, string memory errorMessage) internal pure returns (uint256) {
-        uint256 c = a + b;
-        require(c >= a, errorMessage);
-
-        return c;
-    }
-
-    /**
-     * @dev Returns the subtraction of two unsigned integers, reverting on underflow (when the result is negative).
-     *
-     * Counterpart to Solidity's `-` operator.
-     *
-     * Requirements:
-     * - Subtraction cannot underflow.
-     */
-    function sub(uint256 a, uint256 b) internal pure returns (uint256) {
-        return sub(a, b, "SafeMath: subtraction underflow");
-    }
-
-    /**
-     * @dev Returns the subtraction of two unsigned integers, reverting with custom message on underflow (when the result is negative).
-     *
-     * Counterpart to Solidity's `-` operator.
-     *
-     * Requirements:
-     * - Subtraction cannot underflow.
-     */
-    function sub(uint256 a, uint256 b, string memory errorMessage) internal pure returns (uint256) {
-        require(b <= a, errorMessage);
-        uint256 c = a - b;
-
-        return c;
-    }
-
-    /**
-     * @dev Returns the multiplication of two unsigned integers, reverting on overflow.
-     *
-     * Counterpart to Solidity's `*` operator.
-     *
-     * Requirements:
-     * - Multiplication cannot overflow.
-     */
-    function mul(uint256 a, uint256 b) internal pure returns (uint256) {
-        // Gas optimization: this is cheaper than requiring 'a' not being zero, but the
-        // benefit is lost if 'b' is also tested.
-        // See: https://github.com/OpenZeppelin/openzeppelin-contracts/pull/522
-        if (a == 0) {
-            return 0;
-        }
-
-        uint256 c = a * b;
-        require(c / a == b, "SafeMath: multiplication overflow");
-
-        return c;
-    }
-
-    /**
-     * @dev Returns the multiplication of two unsigned integers, reverting on overflow.
-     *
-     * Counterpart to Solidity's `*` operator.
-     *
-     * Requirements:
-     * - Multiplication cannot overflow.
-     */
-    function mul(uint256 a, uint256 b, string memory errorMessage) internal pure returns (uint256) {
-        // Gas optimization: this is cheaper than requiring 'a' not being zero, but the
-        // benefit is lost if 'b' is also tested.
-        // See: https://github.com/OpenZeppelin/openzeppelin-contracts/pull/522
-        if (a == 0) {
-            return 0;
-        }
-
-        uint256 c = a * b;
-        require(c / a == b, errorMessage);
-
-        return c;
-    }
-
-    /**
-     * @dev Returns the integer division of two unsigned integers.
-     * Reverts on division by zero. The result is rounded towards zero.
-     *
-     * Counterpart to Solidity's `/` operator. Note: this function uses a
-     * `revert` opcode (which leaves remaining gas untouched) while Solidity
-     * uses an invalid opcode to revert (consuming all remaining gas).
-     *
-     * Requirements:
-     * - The divisor cannot be zero.
-     */
-    function div(uint256 a, uint256 b) internal pure returns (uint256) {
-        return div(a, b, "SafeMath: division by zero");
-    }
-
-    /**
-     * @dev Returns the integer division of two unsigned integers.
-     * Reverts with custom message on division by zero. The result is rounded towards zero.
-     *
-     * Counterpart to Solidity's `/` operator. Note: this function uses a
-     * `revert` opcode (which leaves remaining gas untouched) while Solidity
-     * uses an invalid opcode to revert (consuming all remaining gas).
-     *
-     * Requirements:
-     * - The divisor cannot be zero.
-     */
-    function div(uint256 a, uint256 b, string memory errorMessage) internal pure returns (uint256) {
-        // Solidity only automatically asserts when dividing by 0
-        require(b > 0, errorMessage);
-        uint256 c = a / b;
-        // assert(a == b * c + a % b); // There is no case in which this doesn't hold
-
-        return c;
-    }
-
-    /**
-     * @dev Returns the remainder of dividing two unsigned integers. (unsigned integer modulo),
-     * Reverts when dividing by zero.
-     *
-     * Counterpart to Solidity's `%` operator. This function uses a `revert`
-     * opcode (which leaves remaining gas untouched) while Solidity uses an
-     * invalid opcode to revert (consuming all remaining gas).
-     *
-     * Requirements:
-     * - The divisor cannot be zero.
-     */
-    function mod(uint256 a, uint256 b) internal pure returns (uint256) {
-        return mod(a, b, "SafeMath: modulo by zero");
-    }
-
-    /**
-     * @dev Returns the remainder of dividing two unsigned integers. (unsigned integer modulo),
-     * Reverts with custom message when dividing by zero.
-     *
-     * Counterpart to Solidity's `%` operator. This function uses a `revert`
-     * opcode (which leaves remaining gas untouched) while Solidity uses an
-     * invalid opcode to revert (consuming all remaining gas).
-     *
-     * Requirements:
-     * - The divisor cannot be zero.
-     */
-    function mod(uint256 a, uint256 b, string memory errorMessage) internal pure returns (uint256) {
-        require(b != 0, errorMessage);
-        return a % b;
-    }
-}
-
 // File: contracts/compound/ComptrollerInterface.sol
 
 pragma solidity ^0.5.16;
@@ -4735,54 +4546,54 @@ contract SToken is CToken {
 
 }
 
-// File: contracts/compound/CErc20.sol
+// File: contracts/compound/CEther.sol
 
 pragma solidity ^0.5.16;
 
 
 
 /**
- * @title Compound's CErc20 Contract
- * @notice CTokens which wrap an EIP-20 underlying
+ * @title Compound's CEther Contract
+ * @notice CToken which wraps Ether
  * @author Compound
  */
-contract CErc20 is SToken, CErc20Interface {
+contract CEther is SToken {
     /**
-     * @notice Initialize the new money market
-     * @param underlying_ The address of the underlying asset
+     * @notice Construct a new CEther money market
      * @param comptroller_ The address of the Comptroller
      * @param interestRateModel_ The address of the interest rate model
      * @param initialExchangeRateMantissa_ The initial exchange rate, scaled by 1e18
      * @param name_ ERC-20 name of this token
      * @param symbol_ ERC-20 symbol of this token
      * @param decimals_ ERC-20 decimal precision of this token
+     * @param admin_ Address of the administrator of this token
      */
-    function initialize(address underlying_,
-                        ComptrollerInterface comptroller_,
-                        InterestRateModel interestRateModel_,
-                        uint initialExchangeRateMantissa_,
-                        string memory name_,
-                        string memory symbol_,
-                        uint8 decimals_) public {
-        // CToken initialize does the bulk of the work
-        super.initialize(comptroller_, interestRateModel_, initialExchangeRateMantissa_, name_, symbol_, decimals_);
+    constructor(ComptrollerInterface comptroller_,
+                InterestRateModel interestRateModel_,
+                uint initialExchangeRateMantissa_,
+                string memory name_,
+                string memory symbol_,
+                uint8 decimals_,
+                address payable admin_) public {
+        // Creator of the contract is admin during initialization
+        admin = msg.sender;
 
-        // Set underlying and sanity check it
-        underlying = underlying_;
-        EIP20Interface(underlying).totalSupply();
+        initialize(comptroller_, interestRateModel_, initialExchangeRateMantissa_, name_, symbol_, decimals_);
+
+        // Set the proper admin now that initialization is done
+        admin = admin_;
     }
+
 
     /*** User Interface ***/
 
     /**
      * @notice Sender supplies assets into the market and receives cTokens in exchange
-     * @dev Accrues interest whether or not the operation succeeds, unless reverted
-     * @param mintAmount The amount of the underlying asset to supply
-     * @return uint 0=success, otherwise a failure (see ErrorReporter.sol for details)
+     * @dev Reverts upon any failure
      */
-    function mint(uint mintAmount) external returns (uint) {
-        (uint err,) = mintInternal(mintAmount);
-        return err;
+    function mint() external payable {
+        (uint err,) = mintInternal(msg.value);
+        requireNoError(err, "mint failed");
     }
 
     /**
@@ -4816,264 +4627,96 @@ contract CErc20 is SToken, CErc20Interface {
 
     /**
      * @notice Sender repays their own borrow
-     * @param repayAmount The amount to repay
-     * @return uint 0=success, otherwise a failure (see ErrorReporter.sol for details)
+     * @dev Reverts upon any failure
      */
-    function repayBorrow(uint repayAmount) external returns (uint) {
-        (uint err,) = repayBorrowInternal(repayAmount);
-        return err;
+    function repayBorrow() external payable {
+        (uint err,) = repayBorrowInternal(msg.value);
+        requireNoError(err, "repayBorrow failed");
     }
 
     /**
      * @notice Sender repays a borrow belonging to borrower
+     * @dev Reverts upon any failure
      * @param borrower the account with the debt being payed off
-     * @param repayAmount The amount to repay
-     * @return uint 0=success, otherwise a failure (see ErrorReporter.sol for details)
      */
-    function repayBorrowBehalf(address borrower, uint repayAmount) external returns (uint) {
-        (uint err,) = repayBorrowBehalfInternal(borrower, repayAmount);
-        return err;
+    function repayBorrowBehalf(address borrower) external payable {
+        (uint err,) = repayBorrowBehalfInternal(borrower, msg.value);
+        requireNoError(err, "repayBorrowBehalf failed");
     }
 
     /**
      * @notice The sender liquidates the borrowers collateral.
      *  The collateral seized is transferred to the liquidator.
+     * @dev Reverts upon any failure
      * @param borrower The borrower of this cToken to be liquidated
-     * @param repayAmount The amount of the underlying borrowed asset to repay
      * @param cTokenCollateral The market in which to seize collateral from the borrower
-     * @return uint 0=success, otherwise a failure (see ErrorReporter.sol for details)
      */
-    function liquidateBorrow(address borrower, uint repayAmount, CTokenInterface cTokenCollateral) external returns (uint) {
-        (uint err,) = liquidateBorrowInternal(borrower, repayAmount, cTokenCollateral);
-        return err;
+    function liquidateBorrow(address borrower, CToken cTokenCollateral) external payable {
+        (uint err,) = liquidateBorrowInternal(borrower, msg.value, cTokenCollateral);
+        requireNoError(err, "liquidateBorrow failed");
     }
 
     /**
-     * @notice The sender adds to reserves.
-     * @param addAmount The amount fo underlying token to add as reserves
-     * @return uint 0=success, otherwise a failure (see ErrorReporter.sol for details)
+     * @notice Send Ether to CEther to mint
      */
-    function _addReserves(uint addAmount) external returns (uint) {
-        return _addReservesInternal(addAmount);
+    function () external payable {
+        (uint err,) = mintInternal(msg.value);
+        requireNoError(err, "mint failed");
     }
 
     /*** Safe Token ***/
 
     /**
-     * @notice Gets balance of this contract in terms of the underlying
+     * @notice Gets balance of this contract in terms of Ether, before this message
      * @dev This excludes the value of the current message, if any
-     * @return The quantity of underlying tokens owned by this contract
+     * @return The quantity of Ether owned by this contract
      */
     function getCashPrior() internal view returns (uint) {
-        EIP20Interface token = EIP20Interface(underlying);
-        return token.balanceOf(address(this));
+        (MathError err, uint startingBalance) = subUInt(address(this).balance, msg.value);
+        require(err == MathError.NO_ERROR);
+        return startingBalance;
     }
 
     /**
-     * @dev Similar to EIP20 transfer, except it handles a False result from `transferFrom` and reverts in that case.
-     *      This will revert due to insufficient balance or insufficient allowance.
-     *      This function returns the actual amount received,
-     *      which may be less than `amount` if there is a fee attached to the transfer.
-     *
-     *      Note: This wrapper safely handles non-standard ERC-20 tokens that do not return a value.
-     *            See here: https://medium.com/coinmonks/missing-return-value-bug-at-least-130-tokens-affected-d67bf08521ca
+     * @notice Perform the actual transfer in, which is a no-op
+     * @param from Address sending the Ether
+     * @param amount Amount of Ether being sent
+     * @return The actual amount of Ether transferred
      */
     function doTransferIn(address from, uint amount) internal returns (uint) {
-        EIP20NonStandardInterface token = EIP20NonStandardInterface(underlying);
-        uint balanceBefore = EIP20Interface(underlying).balanceOf(address(this));
-        token.transferFrom(from, address(this), amount);
-
-        bool success;
-        assembly {
-            switch returndatasize()
-                case 0 {                       // This is a non-standard ERC-20
-                    success := not(0)          // set success to true
-                }
-                case 32 {                      // This is a compliant ERC-20
-                    returndatacopy(0, 0, 32)
-                    success := mload(0)        // Set `success = returndata` of external call
-                }
-                default {                      // This is an excessively non-compliant ERC-20, revert.
-                    revert(0, 0)
-                }
-        }
-        require(success, "TOKEN_TRANSFER_IN_FAILED");
-
-        // Calculate the amount that was *actually* transferred
-        uint balanceAfter = EIP20Interface(underlying).balanceOf(address(this));
-        require(balanceAfter >= balanceBefore, "TOKEN_TRANSFER_IN_OVERFLOW");
-        return balanceAfter - balanceBefore;   // underflow already checked above, just subtract
+        // Sanity checks
+        require(msg.sender == from, "sender mismatch");
+        require(msg.value == amount, "value mismatch");
+        return amount;
     }
 
-    /**
-     * @dev Similar to EIP20 transfer, except it handles a False success from `transfer` and returns an explanatory
-     *      error code rather than reverting. If caller has not called checked protocol's balance, this may revert due to
-     *      insufficient cash held in this contract. If caller has checked protocol's balance prior to this call, and verified
-     *      it is >= amount, this should not revert in normal conditions.
-     *
-     *      Note: This wrapper safely handles non-standard ERC-20 tokens that do not return a value.
-     *            See here: https://medium.com/coinmonks/missing-return-value-bug-at-least-130-tokens-affected-d67bf08521ca
-     */
     function doTransferOut(address payable to, uint amount) internal {
-        EIP20NonStandardInterface token = EIP20NonStandardInterface(underlying);
-        token.transfer(to, amount);
-
-        bool success;
-        assembly {
-            switch returndatasize()
-                case 0 {                      // This is a non-standard ERC-20
-                    success := not(0)          // set success to true
-                }
-                case 32 {                     // This is a complaint ERC-20
-                    returndatacopy(0, 0, 32)
-                    success := mload(0)        // Set `success = returndata` of external call
-                }
-                default {                     // This is an excessively non-compliant ERC-20, revert.
-                    revert(0, 0)
-                }
-        }
-        require(success, "TOKEN_TRANSFER_OUT_FAILED");
-    }
-}
-
-// File: contracts/ChainlinkAggregatorV3Interface.sol
-
-pragma solidity ^0.5.16;
-
-contract ChainlinkAggregatorV3Interface {
-    function decimals() external view returns (uint8);
-    function description() external view returns (string memory);
-    function version() external view returns (uint256);
-
-    function getRoundData(uint80 _roundId) external
-    view
-    returns (
-        uint80 roundId,
-        int256 answer,
-        uint256 startedAt,
-        uint256 updatedAt,
-        uint80 answeredInRound
-    );
-    function latestRoundData()
-    external
-    view
-    returns (
-        uint80 roundId,
-        int256 answer,
-        uint256 startedAt,
-        uint256 updatedAt,
-        uint80 answeredInRound
-    );
-
-}
-
-// File: contracts/ChainlinkAdaptor.sol
-
-pragma solidity ^0.5.16;
-
-
-
-
-
-
-contract ChainlinkAdaptor is PriceOracle {
-    using SafeMath for uint256;
-
-    address public governance;
-
-    mapping(address => ChainlinkAggregatorV3Interface) public assetsPriceSources;
-    ChainlinkAggregatorV3Interface public nativeTokenPriceSource;
-
-    PriceOracle public fallbackPriceOracle;
-
-    event AssetPriceSourceUpdated(address indexed asset, address indexed source);
-
-    modifier onlyGovernance {
-        require(msg.sender == governance, "Governance required.");
-        _;
+        /* Send the Ether, with minimal gas and revert on failure */
+        to.transfer(amount);
     }
 
-    constructor(address _nativeTokenPriceSource) public {
-        governance = msg.sender;
-        nativeTokenPriceSource = ChainlinkAggregatorV3Interface(_nativeTokenPriceSource);
-    }
-
-    function getUnderlyingPrice(CToken cToken) external view returns (uint) {
-        if (SToken(address(cToken)).isNativeToken()) {
-            return 1e18;
+    function requireNoError(uint errCode, string memory message) internal pure {
+        if (errCode == uint(Error.NO_ERROR)) {
+            return;
         }
 
-        address asset = address(CErc20(address(cToken)).underlying());
-        ChainlinkAggregatorV3Interface priceSource = assetsPriceSources[asset];
+        bytes memory fullMessage = new bytes(bytes(message).length + 5);
+        uint i;
 
-        if (address(priceSource) == address(0x0)) {
-            return getUnderlyingPriceFromFallback(cToken);
+        for (i = 0; i < bytes(message).length; i++) {
+            fullMessage[i] = bytes(message)[i];
         }
 
-        uint256 priceFromChainlink = getUnderlyingPriceFromChainlink(priceSource, cToken);
-        if (priceFromChainlink == 0) {
-            return getUnderlyingPriceFromFallback(cToken);
-        }
-        return priceFromChainlink;
+        fullMessage[i+0] = byte(uint8(32));
+        fullMessage[i+1] = byte(uint8(40));
+        fullMessage[i+2] = byte(uint8(48 + ( errCode / 10 )));
+        fullMessage[i+3] = byte(uint8(48 + ( errCode % 10 )));
+        fullMessage[i+4] = byte(uint8(41));
+
+        require(errCode == uint(Error.NO_ERROR), string(fullMessage));
     }
 
-    function getUnderlyingPriceFromFallback(CToken cToken) public view returns (uint) {
-        if (address(fallbackPriceOracle) != address(0x0)) {
-            return fallbackPriceOracle.getUnderlyingPrice(cToken);
-        }
-        return 0;
-    }
-
-    function getUnderlyingPriceFromChainlink(ChainlinkAggregatorV3Interface chainlinkPriceSource, CToken cToken) view internal returns(uint256) {
-        uint256 assetPriceDecimals = chainlinkPriceSource.decimals();
-        address asset = address(CErc20(address(cToken)).underlying());
-
-        uint256 assetDecimals = CErc20(address(asset)).decimals();
-        uint256 assetPriceInUsd = getPrice(chainlinkPriceSource);
-
-        uint256 nativeTokenPriceDecimals = nativeTokenPriceSource.decimals();
-        uint256 nativeTokenPriceInUsd = getPrice(nativeTokenPriceSource);
-
-        if (assetPriceInUsd == 0 || nativeTokenPriceInUsd == 0) {
-            return 0;
-        }
-        if (assetPriceDecimals == nativeTokenPriceDecimals) {
-            return assetPriceInUsd.mul(10 ** 18).mul(10 ** 18).div(nativeTokenPriceInUsd.mul(10 ** assetDecimals));
-        } else {
-            return assetPriceInUsd.mul(10 ** 18).mul(10 ** nativeTokenPriceDecimals).mul(10 ** 18).div(nativeTokenPriceInUsd.mul(10 ** assetDecimals).mul(10 ** assetPriceDecimals));
-        }
-    }
-
-    function preCheckPrice(ChainlinkAggregatorV3Interface chainlinkPriceSource, CToken cToken) view external returns(uint256 priceFromChainlink, uint256 priceFromFallback) {
-        (priceFromChainlink, priceFromFallback) = (getUnderlyingPriceFromChainlink(chainlinkPriceSource, cToken), getUnderlyingPriceFromFallback(cToken));
-    }
-
-    function getSourcePrice(address asset) view public returns (uint80 roundId, int256 answer, uint256 startedAt, uint256 updatedAt, uint80 answeredInRound) {
-        return assetsPriceSources[asset].latestRoundData();
-    }
-
-    function getPrice(ChainlinkAggregatorV3Interface priceSource) public view returns (uint256) {
-        (,int256 answer,,,) = priceSource.latestRoundData();
-        if (answer > 0) {
-            return uint256(answer);
-        } else {
-            return 0;
-        }
-    }
-
-    function setAssetSources(address[] calldata assets, address[] calldata sources) external onlyGovernance {
-        _setAssetsSources(assets, sources);
-    }
-
-    function setFallbackPriceOracle(address _fallbackPriceOracle) external onlyGovernance {
-        fallbackPriceOracle = PriceOracle(_fallbackPriceOracle);
-    }
-
-    function _setAssetsSources(address[] memory assets, address[] memory sources) internal {
-        require(assets.length == sources.length, 'Inconsistent parameter length');
-        for (uint256 i = 0; i < assets.length; i++) {
-            assetsPriceSources[assets[i]] = ChainlinkAggregatorV3Interface(sources[i]);
-            emit AssetPriceSourceUpdated(assets[i], sources[i]);
-        }
+    function isNativeToken() public pure returns (bool) {
+        return true;
     }
 }
