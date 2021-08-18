@@ -2,6 +2,8 @@ build/
 node_modules/
 .idea/
 .secret
+.secret.bsc
+.env
 .build
 .scencache
 .solcache

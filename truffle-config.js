@@ -17,10 +17,10 @@
  * phrase from a file you've .gitignored so it doesn't accidentally become public.
  *
  */
+ require('dotenv').config()
 
 const HDWalletProvider = require('@truffle/hdwallet-provider');
 const fs = require('fs');
-const mnemonic = fs.readFileSync(".secret").toString().trim();
 
 module.exports = {
   /**
@@ -68,7 +68,7 @@ module.exports = {
     // }
 
       bsctest: {
-          provider: () => new HDWalletProvider(mnemonic, `ws://1.117.32.127/wsbsc/`),
+          provider: () => new HDWalletProvider(process.env.BSCTEST_KEY, process.env.BSCTEST_RPC),
           network_id: "97",
           timeoutBlocks: 600,
           //confirmations: 2,
@@ -79,7 +79,7 @@ module.exports = {
       },
 
       bsc: {
-          provider: () => new HDWalletProvider(mnemonic, `wss://speedy-nodes-nyc.moralis.io/50d91e85ea901f0b2e54edeb/bsc/mainnet/ws`),
+          provider: () => new HDWalletProvider(process.env.BSCMAIN_KEY, process.env.BSCMAIN_RPC),
           network_id: "56",   // This network is yours, in the cloud.
           chain_id: "56",
           timeoutBlocks: 200,
@@ -102,7 +102,7 @@ module.exports = {
         websockets: true
     },
     heco: {
-      provider: () => new HDWalletProvider(mnemonic, `wss://ws-mainnet.hecochain.com`),
+      provider: () => new HDWalletProvider(mnemonic, `wss://rpc-mainnet.matic.quiknode.pro`),
       network_id: "128",   // This network is yours, in the cloud.
       timeoutBlocks: 200,
       confirmations: 2,
